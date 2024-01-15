@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final Product product = controller.productList[index];
                   return Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 4.h),
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
                     child: Card(
                       color: AppColor.background,
                       elevation: 5,
@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Expanded(
-                              flex: 6,
+                              flex: 12,
                               child: Text(
                                 product.name,
                                 style: TextStyle(
@@ -105,7 +105,7 @@ class HomePage extends StatelessWidget {
                                           text: product.color,
                                           style: const TextStyle(
                                               color: AppColor.text,
-                                          fontWeight: FontWeight.w600),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ],
                                     ),
@@ -121,15 +121,15 @@ class HomePage extends StatelessWidget {
                                       children: [
                                         const TextSpan(
                                           text: 'Size: ',
-                                          style:
-                                              TextStyle(color: AppColor.grey,
+                                          style: TextStyle(
+                                              color: AppColor.grey,
                                               fontWeight: FontWeight.w200),
                                         ),
                                         TextSpan(
                                           text: product.size,
                                           style: const TextStyle(
                                               color: AppColor.text,
-                                          fontWeight: FontWeight.w600),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ],
                                     ),
@@ -160,15 +160,16 @@ class HomePage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text(
-                                    product.amount.toString(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: AppColor.text,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'FontMain'),
-                                  ),
+                                  child: Obx(() => Text(
+                                        '${controller.productAmounts[index].value}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          color: AppColor.text,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'FontMain',
+                                        ),
+                                      ),),
                                 ),
                                 Expanded(
                                   flex: 1,
@@ -188,14 +189,17 @@ class HomePage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   flex: 2,
-                                  child: Text(
-                                    '${product.price}\$',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
+                                  child: Obx(
+                                    () => Text(
+                                      '${controller.productPrices[index].value}\$',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
                                         fontSize: 14.sp,
                                         color: AppColor.text,
                                         fontWeight: FontWeight.w400,
-                                        fontFamily: 'FontMain'),
+                                        fontFamily: 'FontMain',
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -209,26 +213,52 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'Total amount:',
-                  style: TextStyle(
-                      color: AppColor.grey,
-                      fontFamily: 'FontMain',
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14.sp),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    'Total amount:',
+                    style: TextStyle(
+                        color: AppColor.grey,
+                        fontFamily: 'FontMain',
+                        fontWeight: FontWeight.w100,
+                        fontSize: 14.sp),
+                  ),
                 ),
-                Text('${controller.calculateTotalAmount().toString() ?? 0}\$'),
+                Obx(
+                  () {
+                    return Expanded(
+                      flex: 1,
+                      child: Text(
+                        '${controller.totalAmount}\$',
+                        style: TextStyle(
+                          color: AppColor.text,
+                          fontFamily: 'FontMain',
+                          fontWeight: FontWeight.w100,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
             10.verticalSpace,
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.snackbar(
+                  'Congratulation!',
+                  'Transaction is done successfully!',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-                padding: EdgeInsets.all(16.0),
-                minimumSize: Size(double.infinity, 0),
+                padding: const EdgeInsets.all(16.0),
+                minimumSize: const Size(double.infinity, 0),
               ),
               child: Text(
                 'CHECK OUT',
